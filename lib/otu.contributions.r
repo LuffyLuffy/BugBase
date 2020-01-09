@@ -168,26 +168,28 @@
 		taxa_plot <- NULL
 		taxa_plot <- ggplot(group_collapsed_otus, aes_string(x = "this_column", 
 													y = "Count", fill="Taxa")) + 
-			geom_bar(stat="identity", show_guide=FALSE) + 
+			geom_bar(stat="identity", show_guide=T) + 
 			labs(y = xlabel, x = "") +
 			theme_classic() +
 			theme(axis.line.x = element_line(colour = 'black', size=0.5, 
 				linetype='solid'), axis.line.y = element_line(colour = 'black', 
 				size=0.5, linetype='solid')) + 
 			scale_fill_manual(values=cols2)
-
+                 width=length(levels(factor(group_collapsed_otus$this_column)))/2
+                 if(width<6){width=6}
 		#assign pdf name
 		file <- c(".pdf")
 		name <- paste(trait, ".pdf", sep='')
 		name <- paste(dir, name, sep="/")
 
 		#make the pdf
-		pdf(name, height=6,width=6)
+		pdf(name, height=6,width=width)
 		par(mar=c(8,4,0.5,6), oma=c(0.1,0.1,0.1,0.1), mgp=c(1.5,0.5,0))
 					
 		# Plot the taxa summary
 		print(taxa_plot)
 		dev.off()
+                 write.table(group_collapsed_otus,paste(name,'.txt',sep=''),row.names=F,sep='\t',quote=F)    
 
 	}
 
